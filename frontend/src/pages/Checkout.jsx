@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { clearCart } from '../redux/cartSlice';
+import { API_URL } from '../config/api';
 import '../styles/checkout.css';
 
 const Checkout = () => {
@@ -19,7 +20,7 @@ const Checkout = () => {
 
   const handlePayment = async () => {
     try {
-      const orderRes = await fetch('/api/payment/order', {
+      const orderRes = await fetch(`${API_URL}/api/payment/order`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ amount: totalPrice })
@@ -38,13 +39,13 @@ const Checkout = () => {
         description: 'Test Transaction',
         order_id: orderData.id,
         handler: async function (response) {
-          const verifyRes = await fetch('/api/payment/verify', {
+          const verifyRes = await fetch(`${API_URL}/api/payment/verify`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(response)
           });
           if (verifyRes.ok) {
-            const saveOrderRes = await fetch('/api/orders', {
+            const saveOrderRes = await fetch(`${API_URL}/api/orders`, {
               method: 'POST',
               headers: { 
                 'Content-Type': 'application/json',
@@ -95,7 +96,7 @@ const Checkout = () => {
 
   const bypassPayment = async (orderId = null) => {
     const paymentId = orderId || 'bypass_txn_' + Date.now();
-    const saveOrderRes = await fetch('/api/orders', {
+    const saveOrderRes = await fetch(`${API_URL}/api/orders`, {
       method: 'POST',
       headers: { 
         'Content-Type': 'application/json',

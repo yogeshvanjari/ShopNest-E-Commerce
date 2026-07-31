@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
+import { API_URL } from '../config/api';
 import '../styles/product.css';
 
 const categories = [
@@ -64,7 +65,7 @@ const Home = () => {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch('/api/products');
+      const res = await fetch(`${API_URL}/api/products`);
       if (!res.ok) {
         throw new Error('Failed to fetch products from server');
       }
